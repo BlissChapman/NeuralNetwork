@@ -8,6 +8,10 @@
 
 /* Begin PBXBuildFile section */
 		A5978B661FC8BE150084FF0A /* NeuralNetwork.swift in Sources */ = {isa = PBXBuildFile; fileRef = A5978B651FC8BE150084FF0A /* NeuralNetwork.swift */; };
+		A5978B781FC8C73B0084FF0A /* train-labels.idx1-ubyte in CopyFiles */ = {isa = PBXBuildFile; fileRef = A5978B681FC8C4F60084FF0A /* train-labels.idx1-ubyte */; };
+		A5978B791FC8C73B0084FF0A /* train-images.idx3-ubyte in CopyFiles */ = {isa = PBXBuildFile; fileRef = A5978B691FC8C4F60084FF0A /* train-images.idx3-ubyte */; };
+		A5978B7A1FC8C73B0084FF0A /* t10k-labels.idx1-ubyte in CopyFiles */ = {isa = PBXBuildFile; fileRef = A5978B6A1FC8C4F60084FF0A /* t10k-labels.idx1-ubyte */; };
+		A5978B7B1FC8C73B0084FF0A /* t10k-images.idx3-ubyte in CopyFiles */ = {isa = PBXBuildFile; fileRef = A5978B6B1FC8C4F60084FF0A /* t10k-images.idx3-ubyte */; };
 		E61768001FC4918C004B39DC /* main.swift in Sources */ = {isa = PBXBuildFile; fileRef = E61767FF1FC4918C004B39DC /* main.swift */; };
 		E61768091FC49557004B39DC /* MNISTUtils.swift in Sources */ = {isa = PBXBuildFile; fileRef = E61768081FC49557004B39DC /* MNISTUtils.swift */; };
 /* End PBXBuildFile section */
@@ -15,21 +19,25 @@
 /* Begin PBXCopyFilesBuildPhase section */
 		E61767FA1FC4918C004B39DC /* CopyFiles */ = {
 			isa = PBXCopyFilesBuildPhase;
-			buildActionMask = 2147483647;
-			dstPath = /usr/share/man/man1/;
-			dstSubfolderSpec = 0;
+			buildActionMask = 12;
+			dstPath = "";
+			dstSubfolderSpec = 16;
 			files = (
+				A5978B781FC8C73B0084FF0A /* train-labels.idx1-ubyte in CopyFiles */,
+				A5978B791FC8C73B0084FF0A /* train-images.idx3-ubyte in CopyFiles */,
+				A5978B7A1FC8C73B0084FF0A /* t10k-labels.idx1-ubyte in CopyFiles */,
+				A5978B7B1FC8C73B0084FF0A /* t10k-images.idx3-ubyte in CopyFiles */,
 			);
-			runOnlyForDeploymentPostprocessing = 1;
+			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
-		A5978B611FC8BCD60084FF0A /* train-labels.idx1-ubyte */ = {isa = PBXFileReference; lastKnownFileType = file; path = "train-labels.idx1-ubyte"; sourceTree = "<group>"; };
-		A5978B621FC8BCD60084FF0A /* train-images.idx3-ubyte */ = {isa = PBXFileReference; lastKnownFileType = file; path = "train-images.idx3-ubyte"; sourceTree = "<group>"; };
-		A5978B631FC8BCD60084FF0A /* t10k-labels.idx1-ubyte */ = {isa = PBXFileReference; lastKnownFileType = file; path = "t10k-labels.idx1-ubyte"; sourceTree = "<group>"; };
-		A5978B641FC8BCD60084FF0A /* t10k-images.idx3-ubyte */ = {isa = PBXFileReference; lastKnownFileType = file; path = "t10k-images.idx3-ubyte"; sourceTree = "<group>"; };
 		A5978B651FC8BE150084FF0A /* NeuralNetwork.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NeuralNetwork.swift; sourceTree = "<group>"; };
+		A5978B681FC8C4F60084FF0A /* train-labels.idx1-ubyte */ = {isa = PBXFileReference; lastKnownFileType = file; path = "train-labels.idx1-ubyte"; sourceTree = "<group>"; };
+		A5978B691FC8C4F60084FF0A /* train-images.idx3-ubyte */ = {isa = PBXFileReference; lastKnownFileType = file; path = "train-images.idx3-ubyte"; sourceTree = "<group>"; };
+		A5978B6A1FC8C4F60084FF0A /* t10k-labels.idx1-ubyte */ = {isa = PBXFileReference; lastKnownFileType = file; path = "t10k-labels.idx1-ubyte"; sourceTree = "<group>"; };
+		A5978B6B1FC8C4F60084FF0A /* t10k-images.idx3-ubyte */ = {isa = PBXFileReference; lastKnownFileType = file; path = "t10k-images.idx3-ubyte"; sourceTree = "<group>"; };
 		E61767FC1FC4918C004B39DC /* NeuralNetMNISTClassifier */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = NeuralNetMNISTClassifier; sourceTree = BUILT_PRODUCTS_DIR; };
 		E61767FF1FC4918C004B39DC /* main.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = main.swift; sourceTree = "<group>"; };
 		E61768081FC49557004B39DC /* MNISTUtils.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MNISTUtils.swift; sourceTree = "<group>"; };
@@ -46,13 +54,13 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
-		A5978B601FC8BCD60084FF0A /* data */ = {
+		A5978B671FC8C4F60084FF0A /* data */ = {
 			isa = PBXGroup;
 			children = (
-				A5978B611FC8BCD60084FF0A /* train-labels.idx1-ubyte */,
-				A5978B621FC8BCD60084FF0A /* train-images.idx3-ubyte */,
-				A5978B631FC8BCD60084FF0A /* t10k-labels.idx1-ubyte */,
-				A5978B641FC8BCD60084FF0A /* t10k-images.idx3-ubyte */,
+				A5978B681FC8C4F60084FF0A /* train-labels.idx1-ubyte */,
+				A5978B691FC8C4F60084FF0A /* train-images.idx3-ubyte */,
+				A5978B6A1FC8C4F60084FF0A /* t10k-labels.idx1-ubyte */,
+				A5978B6B1FC8C4F60084FF0A /* t10k-images.idx3-ubyte */,
 			);
 			path = data;
 			sourceTree = "<group>";
@@ -79,7 +87,7 @@
 				E61767FF1FC4918C004B39DC /* main.swift */,
 				E61768081FC49557004B39DC /* MNISTUtils.swift */,
 				A5978B651FC8BE150084FF0A /* NeuralNetwork.swift */,
-				A5978B601FC8BCD60084FF0A /* data */,
+				A5978B671FC8C4F60084FF0A /* data */,
 			);
 			path = NeuralNetMNISTClassifier;
 			sourceTree = "<group>";

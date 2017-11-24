@@ -8,10 +8,13 @@
 
 import Foundation
 
-let trainingImagesPath = "/Users/blisschapman/Developer/ML/NeuralNetwork/NeuralNetMNISTClassifier/data/train-images.idx3-ubyte"
-let trainingLabelsPath = "/Users/blisschapman/Developer/ML/NeuralNetwork/NeuralNetMNISTClassifier/data/train-labels.idx1-ubyte"
-let testingImagesPath = "/Users/blisschapman/Developer/ML/NeuralNetwork/NeuralNetMNISTClassifier/data/t10k-images.idx3-ubyte"
-let testingLabelsPath = "/Users/blisschapman/Developer/ML/NeuralNetwork/NeuralNetMNISTClassifier/data/t10k-labels.idx1-ubyte"
+guard let trainingImagesPath = URL(string: "train-images.idx3-ubyte")?.absoluteString,
+    let trainingLabelsPath = URL(string: "train-labels.idx1-ubyte")?.absoluteString,
+    let testingImagesPath = URL(string: "t10k-images.idx3-ubyte")?.absoluteString,
+    let testingLabelsPath = URL(string: "t10k-labels.idx1-ubyte")?.absoluteString else {
+        print("Could not retrieve paths to MNIST data.")
+        exit(1)
+}
 
 let trainingImageByteData: [UInt8]
 let trainingLabelByteData: [UInt8]
@@ -30,51 +33,51 @@ do {
             print(errorDescription)
         }
     }
-    exit(1)
+    exit(2)
 }
 
 // EXTRACT TRAINING DATA
 
 guard let trainingImageHeaderInfo = MNISTUtils.extractImageHeaderInfo(fromByteData: trainingImageByteData) else {
     print("Could not extract training images header info from byte data.")
-    exit(2)
+    exit(3)
 }
 
 guard let trainingImages = MNISTUtils.readImages(fromByteData: trainingImageByteData, withHeaderInfo: trainingImageHeaderInfo) else {
     print("Could not extract training images from byte data.")
-    exit(3)
+    exit(4)
 }
 
 guard let trainingLabelHeaderInfo = MNISTUtils.extractLabelHeaderInfo(fromByteData: trainingLabelByteData) else {
     print("Could not extract training label header info from byte data.")
-    exit(4)
+    exit(5)
 }
 
 guard let trainingLabels = MNISTUtils.readLabels(fromByteData: trainingLabelByteData, withHeaderInfo: trainingLabelHeaderInfo) else {
     print("Could not extract training labels from byte data.")
-    exit(5)
+    exit(6)
 }
 
 // EXTRACT TESTING DATA
 
 guard let testingImageHeaderInfo = MNISTUtils.extractImageHeaderInfo(fromByteData: testingImageByteData) else {
     print("Could not extract testing images header info from byte data.")
-    exit(2)
+    exit(7)
 }
 
 guard let testingImages = MNISTUtils.readImages(fromByteData: testingImageByteData, withHeaderInfo: testingImageHeaderInfo) else {
     print("Could not extract testing images from byte data.")
-    exit(3)
+    exit(8)
 }
 
 guard let testingLabelHeaderInfo = MNISTUtils.extractLabelHeaderInfo(fromByteData: testingLabelByteData) else {
     print("Could not extract testing label header info from byte data.")
-    exit(4)
+    exit(9)
 }
 
 guard let testingLabels = MNISTUtils.readLabels(fromByteData: testingLabelByteData, withHeaderInfo: testingLabelHeaderInfo) else {
     print("Could not extract testing labels from byte data.")
-    exit(5)
+    exit(10)
 }
 
 ////////////////////////////////////////////////////////////////////////////////
