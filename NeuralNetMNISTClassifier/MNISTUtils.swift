@@ -8,11 +8,13 @@
 
 import Foundation
 
-/**  Format of the training dataset:
+/**
+ A collection of utility methods to read the MNIST data set.
+
+ Format of the training dataset: http://yann.lecun.com/exdb/mnist/
  
- http://yann.lecun.com/exdb/mnist/
- 
- Handwritten Image ...
+ Handwritten Image:
+ ```
  [offset] [type]          [value]          [description]
  0000     32 bit integer  0x00000803(2051) magic number
  0004     32 bit integer  60000            number of images
@@ -22,10 +24,12 @@ import Foundation
  0017     unsigned byte   ??               pixel
  ........
  xxxx     unsigned byte   ??               pixel
+ ```
  
  ***************************************************
  
  Labels (answers):
+ ```
  [offset] [type]          [value]          [description]
  0000     32 bit integer  0x00000801(2049) magic number (MSB first)
  0004     32 bit integer  60000            number of items
@@ -33,6 +37,8 @@ import Foundation
  0009     unsigned byte   ??               label
  ........
  xxxx     unsigned byte   ??               label
+ ```
+
  The labels values are 0 to 9.
  
  */
@@ -112,6 +118,7 @@ struct MNISTUtils {
     }
     
     //  MARK:  Labels
+
     struct LabelHeaderInfo {
         let numberOfItems: UInt32
         let magicNumber: UInt32

@@ -7,8 +7,8 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		A5978B661FC8BE150084FF0A /* NeuralNetwork.swift in Sources */ = {isa = PBXBuildFile; fileRef = A5978B651FC8BE150084FF0A /* NeuralNetwork.swift */; };
 		E61768001FC4918C004B39DC /* main.swift in Sources */ = {isa = PBXBuildFile; fileRef = E61767FF1FC4918C004B39DC /* main.swift */; };
-		E61768071FC491D4004B39DC /* FFNeuralNet.swift in Sources */ = {isa = PBXBuildFile; fileRef = E61768061FC491D4004B39DC /* FFNeuralNet.swift */; };
 		E61768091FC49557004B39DC /* MNISTUtils.swift in Sources */ = {isa = PBXBuildFile; fileRef = E61768081FC49557004B39DC /* MNISTUtils.swift */; };
 /* End PBXBuildFile section */
 
@@ -25,9 +25,13 @@
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
+		A5978B611FC8BCD60084FF0A /* train-labels.idx1-ubyte */ = {isa = PBXFileReference; lastKnownFileType = file; path = "train-labels.idx1-ubyte"; sourceTree = "<group>"; };
+		A5978B621FC8BCD60084FF0A /* train-images.idx3-ubyte */ = {isa = PBXFileReference; lastKnownFileType = file; path = "train-images.idx3-ubyte"; sourceTree = "<group>"; };
+		A5978B631FC8BCD60084FF0A /* t10k-labels.idx1-ubyte */ = {isa = PBXFileReference; lastKnownFileType = file; path = "t10k-labels.idx1-ubyte"; sourceTree = "<group>"; };
+		A5978B641FC8BCD60084FF0A /* t10k-images.idx3-ubyte */ = {isa = PBXFileReference; lastKnownFileType = file; path = "t10k-images.idx3-ubyte"; sourceTree = "<group>"; };
+		A5978B651FC8BE150084FF0A /* NeuralNetwork.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NeuralNetwork.swift; sourceTree = "<group>"; };
 		E61767FC1FC4918C004B39DC /* NeuralNetMNISTClassifier */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = NeuralNetMNISTClassifier; sourceTree = BUILT_PRODUCTS_DIR; };
 		E61767FF1FC4918C004B39DC /* main.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = main.swift; sourceTree = "<group>"; };
-		E61768061FC491D4004B39DC /* FFNeuralNet.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FFNeuralNet.swift; sourceTree = "<group>"; };
 		E61768081FC49557004B39DC /* MNISTUtils.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MNISTUtils.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -42,6 +46,17 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		A5978B601FC8BCD60084FF0A /* data */ = {
+			isa = PBXGroup;
+			children = (
+				A5978B611FC8BCD60084FF0A /* train-labels.idx1-ubyte */,
+				A5978B621FC8BCD60084FF0A /* train-images.idx3-ubyte */,
+				A5978B631FC8BCD60084FF0A /* t10k-labels.idx1-ubyte */,
+				A5978B641FC8BCD60084FF0A /* t10k-images.idx3-ubyte */,
+			);
+			path = data;
+			sourceTree = "<group>";
+		};
 		E61767F31FC4918C004B39DC = {
 			isa = PBXGroup;
 			children = (
@@ -63,7 +78,8 @@
 			children = (
 				E61767FF1FC4918C004B39DC /* main.swift */,
 				E61768081FC49557004B39DC /* MNISTUtils.swift */,
-				E61768061FC491D4004B39DC /* FFNeuralNet.swift */,
+				A5978B651FC8BE150084FF0A /* NeuralNetwork.swift */,
+				A5978B601FC8BCD60084FF0A /* data */,
 			);
 			path = NeuralNetMNISTClassifier;
 			sourceTree = "<group>";
@@ -127,8 +143,8 @@
 			buildActionMask = 2147483647;
 			files = (
 				E61768091FC49557004B39DC /* MNISTUtils.swift in Sources */,
-				E61768071FC491D4004B39DC /* FFNeuralNet.swift in Sources */,
 				E61768001FC4918C004B39DC /* main.swift in Sources */,
+				A5978B661FC8BE150084FF0A /* NeuralNetwork.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
