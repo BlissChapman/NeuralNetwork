@@ -103,10 +103,10 @@ for (index, image) in testingImages.enumerated() {
         numCorrectPredictionsPerDigit[trueLabel] += 1
     }
 
-//    print("-----------------------------------------------------------------")
-//    print("               LABEL: \(testingLabels[index])          PREDICTION: \(predictedLabel)                ")
-//    print("-----------------------------------------------------------------")
-//    MNISTUtils.printImageGrid(image: image)
+    print("-----------------------------------------------------------------")
+    print("               LABEL: \(testingLabels[index])          PREDICTION: \(predictedLabel)                ")
+    print("-----------------------------------------------------------------")
+    MNISTUtils.printImageGrid(image: image)
 }
 
 ////////////////////////////////////////////////////////////////////////////////
