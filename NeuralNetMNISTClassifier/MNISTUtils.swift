@@ -2,8 +2,8 @@
 //  MNISTUtils.swift
 //  NeuralNetMNISTClassifier
 //
-//  Created by WILLIAM CHAPMAN on 11/21/17.
-//  Copyright © 2017 WILLIAM CHAPMAN. All rights reserved.
+//  Created by Bliss Chapman & William Chapman on 11/21/17.
+//  Copyright © 2017 Bliss Chapman & William Chapman. All rights reserved.
 //
 
 import Foundation

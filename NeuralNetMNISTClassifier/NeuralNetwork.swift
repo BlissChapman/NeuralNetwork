@@ -2,26 +2,28 @@
 //  NeuralNetwork.swift
 //  NeuralNetMNISTClassifier
 //
-//  Created by Bliss Chapman on 11/24/17.
-//  Copyright © 2017 WILLIAM CHAPMAN. All rights reserved.
+//  Created by Bliss Chapman & William Chapman on 11/24/17.
+//  Copyright © 2017 Bliss Chapman & William Chapman. All rights reserved.
 //
 
 import Foundation
 
 struct NeuralNetwork {
 
+    private let learningRate: Double
     private var weights: [[[Double]]] = []
-    let learningRate: Double
 
-    init(layerWidths: [UInt], learningRate: Double = 0.1) {
+    init(layerWidths: [UInt], learningRate: Double) {
         self.learningRate = learningRate
+        initializeRandomWeights(withLayerWidths: layerWidths)
+    }
 
-        for (layerIdx, layerWidth) in layerWidths[0 ..< layerWidths.endIndex-1].enumerated() {
+    private mutating func initializeRandomWeights(withLayerWidths layerWidths: [UInt]) {
+        for layerIdx in 0..<(layerWidths.endIndex-1) {
             let nextLayerWidth = layerWidths[layerIdx + 1]
-
             var randomWeightsLayer: [[Double]] = []
 
-            for _ in 0 ..< layerWidth {
+            for _ in 0..<layerWidths[layerIdx] {
                 var randomNodeWeights: [Double] = []
                 for _ in 0 ..< nextLayerWidth {
                     randomNodeWeights.append(Double(arc4random_uniform(100000)) / 100000.0)
@@ -29,7 +31,7 @@ struct NeuralNetwork {
                 randomWeightsLayer.append(randomNodeWeights)
             }
 
-            weights.append(randomWeightsLayer)
+            self.weights.append(randomWeightsLayer)
         }
     }
 
@@ -40,9 +42,8 @@ struct NeuralNetwork {
         }
 
         // Forward Propagation
-        let inferenceResults = inference(input: x)
-
-        guard let predictions = inferenceResults.perceptronActivations.last else {
+        let perceptronActivations = inference(input: x)
+        guard let predictions = perceptronActivations.last else {
             print("Unknown inference failure 😥")
             return []
         }
@@ -50,26 +51,25 @@ struct NeuralNetwork {
         // Backward Propagation
         // Initialize delta array.
         var delta = [[Double]]()
-        for l in 0..<inferenceResults.perceptronInputs.count {
-            let delta_l = Array<Double>(repeatElement(0.0, count: inferenceResults.perceptronInputs[l].count))
-            delta.append(delta_l)
+        for l in 0..<perceptronActivations.count {
+            delta.append(Array(repeatElement(0.0, count: perceptronActivations[l].count)))
         }
 
         // Compute the ∆ values for the output units, using the observed error.
-        let outputLayerIdx = inferenceResults.perceptronInputs.count - 1
-        for j in 0..<inferenceResults.perceptronInputs[outputLayerIdx].count {
-            let error = y[j] - inferenceResults.perceptronActivations[outputLayerIdx][j]
-            delta[outputLayerIdx][j] = sigmoidDerivative(inferenceResults.perceptronInputs[outputLayerIdx][j]) * error
+        let outputLayerIdx = perceptronActivations.count - 1
+        for j in 0..<perceptronActivations[outputLayerIdx].count {
+            let error = y[j] - perceptronActivations[outputLayerIdx][j]
+            delta[outputLayerIdx][j] = sigmoidDerivative(perceptronActivations[outputLayerIdx][j]) * error
         }
 
         // Propagate deltas backward from output layer to input layer.
         for l in (0..<weights.count).reversed() {
             for i in 0..<weights[l].count {
-                var sum = 0.0
+                var sumLayerError = 0.0
                 for j in 0..<weights[l][i].count {
-                    sum += (weights[l][i][j] * delta[l + 1][j])
+                    sumLayerError += (weights[l][i][j] * delta[l + 1][j])
                 }
-                delta[l][i] = sigmoidDerivative(inferenceResults.perceptronInputs[l][i]) * sum
+                delta[l][i] = sigmoidDerivative(perceptronActivations[l][i]) * sumLayerError
             }
         }
 
@@ -77,7 +77,7 @@ struct NeuralNetwork {
         for l in 0..<weights.count {
             for i in 0..<weights[l].count {
                 for j in 0..<weights[l][i].count {
-                    weights[l][i][j] += (learningRate * inferenceResults.perceptronActivations[l][i] * delta[l][j])
+                    weights[l][i][j] += (learningRate * perceptronActivations[l][i] * delta[l + 1][j])
                 }
             }
         }
@@ -91,7 +91,7 @@ struct NeuralNetwork {
             return []
         }
 
-        guard let predictions = inference(input: input).perceptronActivations.last else {
+        guard let predictions = inference(input: input).last else {
             print("Unknown inference failure 😥")
             return []
         }
@@ -99,12 +99,9 @@ struct NeuralNetwork {
         return predictions
     }
 
-    private func inference(input: [Double]) -> (perceptronInputs: [[Double]], perceptronActivations: [[Double]]) {
+    private func inference(input: [Double]) -> [[Double]] {
         var perceptronActivations = [[Double]]()
         perceptronActivations.append(input)
-
-        var perceptronInputs = [[Double]]()
-        perceptronInputs.append(input)
 
         for l in 0..<weights.count {
             var nextLayer = [Double]()
@@ -118,11 +115,10 @@ struct NeuralNetwork {
                 }
             }
 
-            perceptronInputs.append(nextLayer)
             perceptronActivations.append(nextLayer.map({ sigmoid($0) }))
         }
 
-        return (perceptronInputs, perceptronActivations)
+        return perceptronActivations
     }
 
     private func sigmoid(_ z: Double) -> Double {
