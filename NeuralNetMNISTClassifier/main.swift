@@ -83,9 +83,25 @@ guard let testingLabels = MNISTUtils.readLabels(fromByteData: testingLabelByteDa
 ////////////////////////////////////////////////////////////////////////////////
 //                             TRAINING                                       //
 ////////////////////////////////////////////////////////////////////////////////
-let neuralNet = NeuralNetwork()
-for (index, trainingImage) in trainingImages.enumerated() {
-    neuralNet.train(image: trainingImage, label: trainingLabels[index])
+var neuralNet = NeuralNetwork(layerWidths: [784, 10])
+
+for i in 0..<trainingImages.count {
+    let trainingInput = trainingImages[i].flatMap({ $0 })
+
+    let label = Int(trainingLabels[i])
+    var desiredOutput = Array<Double>(repeatElement(0, count: 10))
+    desiredOutput[label] = 1
+
+    let predictions = neuralNet.train(input: trainingInput, desiredOutput: desiredOutput)
+
+    // compute loss
+    if i % 1000 == 0 {
+        var loss = 0.0
+        for i in 0..<predictions.count {
+            loss += pow(predictions[i] - desiredOutput[i], 2.0)
+        }
+        print("LOSS: \(loss)")
+    }
 }
 
 ////////////////////////////////////////////////////////////////////////////////
@@ -94,19 +110,27 @@ for (index, trainingImage) in trainingImages.enumerated() {
 var numExamplesPerDigit = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
 var numCorrectPredictionsPerDigit = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
 
-for (index, image) in testingImages.enumerated() {
+for (index, testImage) in testingImages.enumerated() {
+    let testInput = testImage.flatMap({ $0 })
     let trueLabel = Int(testingLabels[index])
-    let predictedLabel = Int(neuralNet.predict(image: image))
+
+    let predictions = neuralNet.predict(fromTestInput: testInput)
+    var predictedLabel = 0
+    for i in 0 ..< predictions.count {
+        if predictions[i] > predictions[predictedLabel] {
+            predictedLabel = i
+        }
+    }
 
     numExamplesPerDigit[trueLabel] += 1
     if trueLabel == predictedLabel {
         numCorrectPredictionsPerDigit[trueLabel] += 1
     }
 
-    print("-----------------------------------------------------------------")
-    print("               LABEL: \(testingLabels[index])          PREDICTION: \(predictedLabel)                ")
-    print("-----------------------------------------------------------------")
-    MNISTUtils.printImageGrid(image: image)
+    //print("-----------------------------------------------------------------")
+    //print("               LABEL: \(testingLabels[index])          PREDICTION: \(predictedLabel)                ")
+    //print("-----------------------------------------------------------------")
+    //MNISTUtils.printImageGrid(image: testImage)
 }
 
 ////////////////////////////////////////////////////////////////////////////////
@@ -116,6 +140,9 @@ print("========== ACCURACY ==========")
 for i in 0...9 {
     print("\(i): \((Double(numCorrectPredictionsPerDigit[i]) / Double(numExamplesPerDigit[i]))*100.0)%")
 }
-print("\nOVERALL: \((Double(numCorrectPredictionsPerDigit.reduce(0, +)) / Double(trainingImages.count) * 100.0))%")
+
+let totalNumCorrectPredictions = numCorrectPredictionsPerDigit.reduce(0) { $0 + $1 }
+let totalNumPredictions = numExamplesPerDigit.reduce(0) { $0 + $1 }
+print("\nOVERALL: \(Double(totalNumCorrectPredictions) / Double(totalNumPredictions) * 100.0)%")
 
 
