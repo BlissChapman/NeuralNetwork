@@ -2,8 +2,8 @@
 //  main.swift
 //  NeuralNetMNISTClassifier
 //
-//  Created by WILLIAM CHAPMAN on 11/21/17.
-//  Copyright © 2017 WILLIAM CHAPMAN. All rights reserved.
+//  Created by Bliss Chapman & William Chapman on 11/21/17.
+//  Copyright © 2017 Bliss Chapman & William Chapman. All rights reserved.
 //
 
 import Foundation
@@ -83,30 +83,85 @@ guard let testingLabels = MNISTUtils.readLabels(fromByteData: testingLabelByteDa
 ////////////////////////////////////////////////////////////////////////////////
 //                             TRAINING                                       //
 ////////////////////////////////////////////////////////////////////////////////
-let neuralNet = NeuralNetwork()
-for (index, trainingImage) in trainingImages.enumerated() {
-    neuralNet.train(image: trainingImage, label: trainingLabels[index])
+var neuralNet = NeuralNetwork(layerWidths: [784, 10], learningRate: 0.001)
+
+var lossSum = 0.0
+var latestLossAvg = 99999999999.9
+var numIterations = 0
+
+var numTrainingExamplesPerDigit = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
+var numTrainingCorrectPredictionsPerDigit = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
+
+while latestLossAvg > 0.35 {
+    for i in 0..<trainingImages.count {
+        let trainingInput = trainingImages[i].flatMap({ $0 })
+
+        let trueLabel = Int(trainingLabels[i])
+        var desiredOutput = Array<Double>(repeatElement(0, count: 10))
+        desiredOutput[trueLabel] = 1
+
+        let predictions = neuralNet.train(input: trainingInput, desiredOutput: desiredOutput)
+
+        // ==================== DIAGNOSTICS ====================
+        // Update iteration count
+        numIterations += 1
+
+        // Compute accuracy
+        var predictedLabel = 0
+        for i in 0 ..< predictions.count {
+            if predictions[i] > predictions[predictedLabel] {
+                predictedLabel = i
+            }
+        }
+
+        numTrainingExamplesPerDigit[trueLabel] += 1
+        if trueLabel == predictedLabel {
+            numTrainingCorrectPredictionsPerDigit[trueLabel] += 1
+        }
+
+        // Compute loss
+        for j in 0..<predictions.count {
+            lossSum += pow(predictions[j] - desiredOutput[j], 2.0)
+        }
+
+        // Print diagnostics
+        if numIterations % 1000 == 0 {
+            latestLossAvg = lossSum / 1000.0
+            lossSum = 0.0
+
+            let totalNumCorrectPredictions = numTrainingCorrectPredictionsPerDigit.reduce(0) { $0 + $1 }
+            let totalNumPredictions = numTrainingExamplesPerDigit.reduce(0) { $0 + $1 }
+            print("ITERATION: \(numIterations) LOSS: \(latestLossAvg)    => OVERALL ACCURACY: \(Double(totalNumCorrectPredictions) / Double(totalNumPredictions) * 100.0)%")
+
+            numTrainingExamplesPerDigit = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
+            numTrainingCorrectPredictionsPerDigit = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
+        }
+        // ==================== DIAGNOSTICS ====================
+    }
 }
 
 ////////////////////////////////////////////////////////////////////////////////
 //                             TESTING                                        //
 ////////////////////////////////////////////////////////////////////////////////
-var numExamplesPerDigit = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
-var numCorrectPredictionsPerDigit = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
+var numTestExamplesPerDigit = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
+var numTestCorrectPredictionsPerDigit = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
 
-for (index, image) in testingImages.enumerated() {
+for (index, testImage) in testingImages.enumerated() {
+    let testInput = testImage.flatMap({ $0 })
     let trueLabel = Int(testingLabels[index])
-    let predictedLabel = Int(neuralNet.predict(image: image))
 
-    numExamplesPerDigit[trueLabel] += 1
-    if trueLabel == predictedLabel {
-        numCorrectPredictionsPerDigit[trueLabel] += 1
+    let predictions = neuralNet.predict(fromTestInput: testInput)
+    var predictedLabel = 0
+    for i in 0 ..< predictions.count {
+        if predictions[i] > predictions[predictedLabel] {
+            predictedLabel = i
+        }
     }
 
-    print("-----------------------------------------------------------------")
-    print("               LABEL: \(testingLabels[index])          PREDICTION: \(predictedLabel)                ")
-    print("-----------------------------------------------------------------")
-    MNISTUtils.printImageGrid(image: image)
+    numTestExamplesPerDigit[trueLabel] += 1
+    if trueLabel == predictedLabel {
+        numTestCorrectPredictionsPerDigit[trueLabel] += 1
+    }
 }
 
 ////////////////////////////////////////////////////////////////////////////////
@@ -114,8 +169,11 @@ for (index, image) in testingImages.enumerated() {
 ////////////////////////////////////////////////////////////////////////////////
 print("========== ACCURACY ==========")
 for i in 0...9 {
-    print("\(i): \((Double(numCorrectPredictionsPerDigit[i]) / Double(numExamplesPerDigit[i]))*100.0)%")
+    print("\(i): \((Double(numTestCorrectPredictionsPerDigit[i]) / Double(numTestExamplesPerDigit[i]))*100.0)%")
 }
-print("\nOVERALL: \((Double(numCorrectPredictionsPerDigit.reduce(0, +)) / Double(trainingImages.count) * 100.0))%")
+
+let totalNumCorrectPredictions = numTestCorrectPredictionsPerDigit.reduce(0) { $0 + $1 }
+let totalNumPredictions = numTestExamplesPerDigit.reduce(0) { $0 + $1 }
+print("\nOVERALL: \(Double(totalNumCorrectPredictions) / Double(totalNumPredictions) * 100.0)%")
 
 
