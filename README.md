@@ -1,7 +1,7 @@
 A 2017 Thanksgiving break project consisting of a handwritten neural net to classify the MNIST data set.
 This project was written in an effort to more intimately understand how neural nets work.
 
-#### Results
+### Results
 The best results I had the time/patience to achieve were obtained with a fully-connected
 architecture with no hidden layers (i.e. [784, 10]) and a learning rate of 0.001:
 
@@ -17,9 +17,10 @@ architecture with no hidden layers (i.e. [784, 10]) and a learning rate of 0.001
 8: 83.3675564681725%
 9: 80.4757185332012%
 
-OVERALL: 86.9%```
+OVERALL: 86.9%
+```
 
-#### MNIST Dataset
+### MNIST Dataset
 Format of the dataset: http://yann.lecun.com/exdb/mnist/
 
 Handwritten Image:
