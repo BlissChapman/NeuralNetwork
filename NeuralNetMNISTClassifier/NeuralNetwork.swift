@@ -7,7 +7,31 @@
 //
 
 import Foundation
+import Accelerate
 
+// =============================================================================
+//                             Custom Operators
+// =============================================================================
+
+precedencegroup DotProductPrecedence {
+    lowerThan: AdditionPrecedence
+    associativity: left
+}
+
+infix operator •: DotProductPrecedence
+
+func •(a: [Double], b: [Double]) -> Double {
+    var result = 0.0
+    vDSP_dotprD(a, 1, b, 1, &result, vDSP_Length(a.count))
+    return result
+}
+
+// =============================================================================
+// =============================================================================
+
+
+/**
+ */
 struct NeuralNetwork {
 
     private let learningRate: Double
@@ -65,10 +89,7 @@ struct NeuralNetwork {
         // Propagate deltas backward from output layer to input layer.
         for l in (0..<weights.count).reversed() {
             for i in 0..<weights[l].count {
-                var sumLayerError = 0.0
-                for j in 0..<weights[l][i].count {
-                    sumLayerError += (weights[l][i][j] * delta[l + 1][j])
-                }
+                let sumLayerError = weights[l][i] • delta[l + 1]
                 delta[l][i] = sigmoidDerivative(perceptronActivations[l][i]) * sumLayerError
             }
         }
@@ -104,18 +125,16 @@ struct NeuralNetwork {
         perceptronActivations.append(input)
 
         for l in 0..<weights.count {
-            var nextLayer = [Double]()
+            let numPerceptronsInNextLayer = weights[l][0].count
+            perceptronActivations.append(Array(repeatElement(0.0, count: numPerceptronsInNextLayer)))
 
             for i in 0..<weights[l].count {
-                if nextLayer.count == 0 {
-                    nextLayer = Array(repeatElement(0.0, count: weights[l][i].count))
-                }
                 for j in 0..<weights[l][i].count {
-                    nextLayer[j] += (weights[l][i][j] * perceptronActivations[l][i])
+                    perceptronActivations[l + 1][j] += (weights[l][i][j] * perceptronActivations[l][i])
                 }
             }
 
-            perceptronActivations.append(nextLayer.map({ sigmoid($0) }))
+            perceptronActivations[l + 1] = perceptronActivations[l + 1].map({ sigmoid($0) })
         }
 
         return perceptronActivations

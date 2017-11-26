@@ -83,7 +83,7 @@ guard let testingLabels = MNISTUtils.readLabels(fromByteData: testingLabelByteDa
 ////////////////////////////////////////////////////////////////////////////////
 //                             TRAINING                                       //
 ////////////////////////////////////////////////////////////////////////////////
-var neuralNet = NeuralNetwork(layerWidths: [784, 10])
+var neuralNet = NeuralNetwork(layerWidths: [784, 10], learningRate: 0.001)
 
 var lossSum = 0.0
 var latestLossAvg = 99999999999.9
@@ -92,7 +92,7 @@ var numIterations = 0
 var numTrainingExamplesPerDigit = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
 var numTrainingCorrectPredictionsPerDigit = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
 
-while latestLossAvg > 0.3 {
+while latestLossAvg > 0.35 {
     for i in 0..<trainingImages.count {
         let trainingInput = trainingImages[i].flatMap({ $0 })
 
