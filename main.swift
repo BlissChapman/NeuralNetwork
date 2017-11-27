@@ -8,10 +8,10 @@
 
 import Foundation
 
-guard let trainingImagesPath = URL(string: "train-images.idx3-ubyte")?.absoluteString,
-    let trainingLabelsPath = URL(string: "train-labels.idx1-ubyte")?.absoluteString,
-    let testingImagesPath = URL(string: "t10k-images.idx3-ubyte")?.absoluteString,
-    let testingLabelsPath = URL(string: "t10k-labels.idx1-ubyte")?.absoluteString else {
+guard let trainingImagesPath = URL(string: "data/train-images.idx3-ubyte")?.absoluteString,
+    let trainingLabelsPath = URL(string: "data/train-labels.idx1-ubyte")?.absoluteString,
+    let testingImagesPath = URL(string: "data/t10k-images.idx3-ubyte")?.absoluteString,
+    let testingLabelsPath = URL(string: "data/t10k-labels.idx1-ubyte")?.absoluteString else {
         print("Could not retrieve paths to MNIST data.")
         exit(1)
 }
@@ -175,5 +175,3 @@ for i in 0...9 {
 let totalNumCorrectPredictions = numTestCorrectPredictionsPerDigit.reduce(0) { $0 + $1 }
 let totalNumPredictions = numTestExamplesPerDigit.reduce(0) { $0 + $1 }
 print("\nOVERALL: \(Double(totalNumCorrectPredictions) / Double(totalNumPredictions) * 100.0)%")
-
-
