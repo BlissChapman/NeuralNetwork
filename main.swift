@@ -85,6 +85,9 @@ guard let testingLabels = MNISTUtils.readLabels(fromByteData: testingLabelByteDa
 ////////////////////////////////////////////////////////////////////////////////
 var neuralNet = NeuralNetwork(layerWidths: [784, 10], learningRate: 0.001)
 
+let targetLoss = 0.25
+let numIterationsBetweenPrints = 500
+
 var lossSum = 0.0
 var latestLossAvg = 99999999999.9
 var numIterations = 0
@@ -92,7 +95,7 @@ var numIterations = 0
 var numTrainingExamplesPerDigit = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
 var numTrainingCorrectPredictionsPerDigit = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
 
-while latestLossAvg > 0.35 {
+trainingLoop: while true {
     for i in 0..<trainingImages.count {
         let trainingInput = trainingImages[i].flatMap({ $0 })
 
@@ -125,8 +128,8 @@ while latestLossAvg > 0.35 {
         }
 
         // Print diagnostics
-        if numIterations % 1000 == 0 {
-            latestLossAvg = lossSum / 1000.0
+        if numIterations % numIterationsBetweenPrints == 0 {
+            latestLossAvg = lossSum / Double(numIterationsBetweenPrints)
             lossSum = 0.0
 
             let totalNumCorrectPredictions = numTrainingCorrectPredictionsPerDigit.reduce(0) { $0 + $1 }
@@ -135,6 +138,12 @@ while latestLossAvg > 0.35 {
 
             numTrainingExamplesPerDigit = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
             numTrainingCorrectPredictionsPerDigit = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
+
+            // Check if target loss has been reached:
+            if latestLossAvg <= targetLoss {
+              print("========== TRAINING COMPLETE ==========")
+              break trainingLoop
+            }
         }
         // ==================== DIAGNOSTICS ====================
     }

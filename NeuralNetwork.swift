@@ -50,7 +50,8 @@ struct NeuralNetwork {
             for _ in 0..<layerWidths[layerIdx] {
                 var randomNodeWeights: [Double] = []
                 for _ in 0 ..< nextLayerWidth {
-                    randomNodeWeights.append(Double(arc4random_uniform(100000)) / 100000.0)
+                    let randomInt = randomValue(inRange: -10000..<10000)
+                    randomNodeWeights.append(Double(randomInt) / 10000.0)
                 }
                 randomWeightsLayer.append(randomNodeWeights)
             }
@@ -140,6 +141,20 @@ struct NeuralNetwork {
         return perceptronActivations
     }
 
+    // Activation Functions
+
+    private func relu(_ z: Double) -> Double {
+      return max(Double.leastNonzeroMagnitude, z)
+    }
+
+    private func reluDerivative(_ z: Double) -> Double {
+      if z < 0 {
+        return 0.0
+      } else {
+        return 1.0
+      }
+    }
+
     private func sigmoid(_ z: Double) -> Double {
         return 1.0 / (1.0 + exp(-z))
     }
@@ -147,5 +162,9 @@ struct NeuralNetwork {
     private func sigmoidDerivative(_ z: Double) -> Double {
         let x = sigmoid(z)
         return x*(1.0-x)
+    }
+
+    private func randomValue(inRange range: Range<Int>) -> Int {
+      return Int(arc4random_uniform(UInt32(range.upperBound - range.lowerBound))) + range.lowerBound
     }
 }
